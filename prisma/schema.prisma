@@ -1,0 +1,53 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// User model
+model User {
+  id        String     @id @default(cuid())
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  // Relations
+  sessions  PracticeSession[]
+  progress  Progress?
+}
+
+// Practice Session model - stores speech practice attempts
+model PracticeSession {
+  id        String    @id @default(cuid())
+  userId    String
+  sentence  String    // Expected sentence
+  userText  String    // What the user said
+  feedback  String?   // AI feedback
+  score     Float?    // Score (0-100)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  // Relation to User
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+// Progress model - tracks user's learning progress
+model Progress {
+  id               String    @id @default(cuid())
+  userId           String    @unique
+  streak           Int       @default(0)        // Days practicing streak
+  lastPracticeDate DateTime? // Last practice date
+  totalSessions    Int       @default(0)        // Total sessions completed
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  // Relation to User
+  user             User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
