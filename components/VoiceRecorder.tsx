@@ -6,19 +6,25 @@ import { SpeechRecognizer, speakText, stopSpeaking } from "@/lib/speech";
 interface VoiceRecorderProps {
   expectedSentence: string;
   onTranscriptReceived: (transcript: string) => void;
+  onAudioRecorded?: (audioBlob: Blob) => void;
   isProcessing?: boolean;
 }
 
 export function VoiceRecorder({
   expectedSentence,
   onTranscriptReceived,
+  onAudioRecorded,
   isProcessing = false,
 }: VoiceRecorderProps) {
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [recordedAudioUrl, setRecordedAudioUrl] = useState<string | null>(null);
+  const [isPlayingBack, setIsPlayingBack] = useState(false);
   const recognizerRef = useRef<SpeechRecognizer | null>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
 
   // Initialize speech recognizer
   const initializeRecognizer = useCallback(() => {
@@ -33,31 +39,65 @@ export function VoiceRecorder({
     }
   }, []);
 
-  // Handle recording start
+  // Handle recording start with audio capture
   const handleStartRecording = useCallback(async () => {
     setError(null);
     setTranscript("");
+    setRecordedAudioUrl(null);
     initializeRecognizer();
 
     if (!recognizerRef.current) return;
 
     try {
       setIsListening(true);
+      
+      // Start audio recording
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mediaRecorder = new MediaRecorder(stream);
+      mediaRecorderRef.current = mediaRecorder;
+      audioChunksRef.current = [];
+
+      mediaRecorder.ondataavailable = (event) => {
+        audioChunksRef.current.push(event.data);
+      };
+
+      mediaRecorder.onstop = () => {
+        const audioBlob = new Blob(audioChunksRef.current, { type: "audio/wav" });
+        const url = URL.createObjectURL(audioBlob);
+        setRecordedAudioUrl(url);
+        
+        // Notify parent if they want the audio blob
+        if (onAudioRecorded) {
+          onAudioRecorded(audioBlob);
+        }
+      };
+
+      mediaRecorder.start();
+
+      // Record speech
       const result = await recognizerRef.current.start();
       setTranscript(result);
       onTranscriptReceived(result);
+      
+      // Stop media recorder
+      mediaRecorder.stop();
+      stream.getTracks().forEach(track => track.stop());
+      
       setIsListening(false);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Recording failed");
       setIsListening(false);
     }
-  }, [initializeRecognizer, onTranscriptReceived]);
+  }, [initializeRecognizer, onTranscriptReceived, onAudioRecorded]);
 
   // Handle recording stop
   const handleStopRecording = useCallback(() => {
     if (recognizerRef.current) {
       recognizerRef.current.stop();
       setIsListening(false);
+    }
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== "inactive") {
+      mediaRecorderRef.current.stop();
     }
   }, []);
 
@@ -75,6 +115,30 @@ export function VoiceRecorder({
       setIsSpeaking(false);
     }
   }, [expectedSentence]);
+
+  // Playback user's recorded voice
+  const handlePlaybackUserVoice = useCallback(() => {
+    if (!recordedAudioUrl) return;
+    
+    try {
+      setIsPlayingBack(true);
+      const audio = new Audio(recordedAudioUrl);
+      
+      audio.onended = () => {
+        setIsPlayingBack(false);
+      };
+      
+      audio.onerror = () => {
+        setError("Failed to play recording");
+        setIsPlayingBack(false);
+      };
+      
+      audio.play();
+    } catch (err) {
+      setError("Failed to play your voice");
+      setIsPlayingBack(false);
+    }
+  }, [recordedAudioUrl]);
 
   // Handle stop speaking
   const handleStopSpeaking = useCallback(() => {
@@ -106,6 +170,17 @@ export function VoiceRecorder({
             You said:
           </p>
           <p className="text-xl text-gray-900">{transcript}</p>
+          
+          {/* Playback User Voice */}
+          {recordedAudioUrl && (
+            <button
+              onClick={handlePlaybackUserVoice}
+              disabled={isPlayingBack}
+              className="mt-3 px-4 py-2 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 disabled:opacity-50 transition"
+            >
+              {isPlayingBack ? "🔊 Playing..." : "🔊 Hear Your Voice"}
+            </button>
+          )}
         </div>
       )}
 

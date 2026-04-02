@@ -153,11 +153,34 @@ export default function RVsLLessonPage() {
               </p>
             </div>
 
-            {/* R Sound Section */}
+            {/* R Sound Section with Visual Training */}
             <div className="bg-gradient-to-br from-red-50 to-pink-50 rounded-2xl p-6 mb-6 border-2 border-red-200">
               <h2 className="text-2xl font-bold text-red-900 mb-3 flex items-center gap-2">
                 <span className="text-3xl">🔴</span> The R Sound
               </h2>
+              
+              {/* Visual Diagram */}
+              <div className="bg-white rounded-xl p-4 mb-4 border-2 border-red-300">
+                <p className="text-center font-semibold text-gray-700 mb-3">Mouth Position for R Sound:</p>
+                <div className="text-center text-4xl mb-3">
+                  👅 ← Tongue pulled BACK
+                </div>
+                <div className="grid grid-cols-2 gap-4 text-sm text-gray-700">
+                  <div className="text-center pb-3 border-b border-green-300">
+                    <p className="font-bold text-green-700 mb-1">✅ DO THIS:</p>
+                    <p>• Pull tongue slightly back</p>
+                    <p>• Round your lips</p>
+                    <p>• Don't touch roof of mouth</p>
+                  </div>
+                  <div className="text-center pb-3 border-b border-red-300">
+                    <p className="font-bold text-red-700 mb-1">❌ DON'T DO THIS:</p>
+                    <p>• Don't touch the top</p>
+                    <p>• Don't flatten your lips</p>
+                    <p>• Don't make an L sound</p>
+                  </div>
+                </div>
+              </div>
+
               <p className="text-gray-700 mb-4">
                 {LESSON_CONTENT.examples.R.explanation}
               </p>
@@ -180,11 +203,34 @@ export default function RVsLLessonPage() {
               </div>
             </div>
 
-            {/* L Sound Section */}
+            {/* L Sound Section with Visual Training */}
             <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-6 mb-8 border-2 border-blue-200">
               <h2 className="text-2xl font-bold text-blue-900 mb-3 flex items-center gap-2">
                 <span className="text-3xl">🔵</span> The L Sound
               </h2>
+              
+              {/* Visual Diagram */}
+              <div className="bg-white rounded-xl p-4 mb-4 border-2 border-blue-300">
+                <p className="text-center font-semibold text-gray-700 mb-3">Mouth Position for L Sound:</p>
+                <div className="text-center text-4xl mb-3">
+                  👅 ↑ Tongue ON RIDGE (behind top teeth)
+                </div>
+                <div className="grid grid-cols-2 gap-4 text-sm text-gray-700">
+                  <div className="text-center pb-3 border-b border-green-300">
+                    <p className="font-bold text-green-700 mb-1">✅ DO THIS:</p>
+                    <p>• Touch ridge behind teeth</p>
+                    <p>• Let air flow AROUND sides</p>
+                    <p>• Make a crisp sound</p>
+                  </div>
+                  <div className="text-center pb-3 border-b border-red-300">
+                    <p className="font-bold text-red-700 mb-1">❌ DON'T DO THIS:</p>
+                    <p>• Don't pull tongue back</p>
+                    <p>• Don't round your lips</p>
+                    <p>• Don't make an R sound</p>
+                  </div>
+                </div>
+              </div>
+
               <p className="text-gray-700 mb-4">
                 {LESSON_CONTENT.examples.L.explanation}
               </p>
@@ -289,6 +335,25 @@ export default function RVsLLessonPage() {
                   userSpeech={transcript}
                   expectedSentence={currentWord.expected}
                 />
+
+                {/* Try Again Button - Shows when score < 80 */}
+                {feedback.score < 80 && (
+                  <div className="mt-6 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-300 rounded-xl text-center">
+                    <p className="text-blue-900 font-semibold mb-4">
+                      You're very close! Let's get that sound right. 🎯
+                    </p>
+                    <button
+                      onClick={() => {
+                        setTranscript("");
+                        setFeedback(null);
+                      }}
+                      disabled={isLoading}
+                      className="px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg font-bold hover:shadow-lg disabled:opacity-50 transition-all inline-block"
+                    >
+                      🔁 Try Again
+                    </button>
+                  </div>
+                )}
               </div>
             )}
 

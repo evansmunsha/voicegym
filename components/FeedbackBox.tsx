@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
+import { speakText, stopSpeaking } from "@/lib/speech";
 
 export interface FeedbackBoxProps {
   mistakes: string[];
@@ -24,10 +25,28 @@ export function FeedbackBox({
   const [expandedSection, setExpandedSection] = useState<string | null>(
     "overview"
   );
+  const [isCoachSpeaking, setIsCoachSpeaking] = useState(false);
 
   const toggleSection = (section: string) => {
     setExpandedSection(expandedSection === section ? null : section);
   };
+
+  // Voice coach - speak the explanation
+  const handleCoachSpeak = useCallback(async () => {
+    try {
+      setIsCoachSpeaking(true);
+      await speakText(explanation, 0.85);
+      setIsCoachSpeaking(false);
+    } catch (err) {
+      console.error("Coach voice error:", err);
+      setIsCoachSpeaking(false);
+    }
+  }, [explanation]);
+
+  const handleStopCoach = useCallback(() => {
+    stopSpeaking();
+    setIsCoachSpeaking(false);
+  }, []);
 
   const scoreColor =
     score >= 80 ? "text-green-600" : score >= 60 ? "text-yellow-600" : "text-red-600";
@@ -46,6 +65,15 @@ export function FeedbackBox({
           </div>
           <p className="text-5xl">{scoreEmoji}</p>
         </div>
+
+        {/* Voice Coach Button */}
+        <button
+          onClick={isCoachSpeaking ? handleStopCoach : handleCoachSpeak}
+          className="mt-4 w-full px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg font-semibold hover:shadow-lg disabled:opacity-50 transition flex items-center justify-center gap-2"
+        >
+          <span className="text-lg">{isCoachSpeaking ? "⏹️" : "🎤"}</span>
+          {isCoachSpeaking ? "Stop Coach" : "Hear Coach Feedback"}
+        </button>
       </div>
 
       {/* Expected vs User Speech */}

@@ -41,6 +41,34 @@ export default function PracticePage() {
     setUserId(getUserId());
   }, []);
 
+  // Auto-save session when feedback is available
+  useEffect(() => {
+    const autoSave = async () => {
+      if (feedback && userId && transcript && !isSaving) {
+        setIsSaving(true);
+        try {
+          await savePracticeSession({
+            userId,
+            sentence: currentSentence,
+            userText: transcript,
+            feedback: feedback.explanation,
+            score: feedback.score,
+          });
+          setSaveSuccess(true);
+          // Hide success message after 1.5 seconds
+          setTimeout(() => setSaveSuccess(false), 1500);
+        } catch (err) {
+          console.error("Auto-save failed:", err);
+          // Silently fail on auto-save
+        } finally {
+          setIsSaving(false);
+        }
+      }
+    };
+
+    autoSave();
+  }, [feedback, userId, transcript, currentSentence, isSaving]);
+
   // Handle transcript received from voice recorder
   const handleTranscriptReceived = useCallback(async (text: string) => {
     if (!text.trim()) {
@@ -68,31 +96,6 @@ export default function PracticePage() {
       setIsLoading(false);
     }
   }, [currentSentence]);
-
-  // Save practice session to database
-  const handleSaveSession = useCallback(async () => {
-    if (!feedback || !userId || !transcript) return;
-
-    setIsSaving(true);
-    try {
-      await savePracticeSession({
-        userId,
-        sentence: currentSentence,
-        userText: transcript,
-        feedback: feedback.explanation,
-        score: feedback.score,
-      });
-      setSaveSuccess(true);
-      // Reset after 2 seconds
-      setTimeout(() => setSaveSuccess(false), 2000);
-    } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Failed to save practice session"
-      );
-    } finally {
-      setIsSaving(false);
-    }
-  }, [feedback, userId, transcript, currentSentence]);
 
   // Move to next sentence
   const handleNextSentence = () => {
@@ -185,23 +188,32 @@ export default function PracticePage() {
               expectedSentence={currentSentence}
             />
 
-            {/* Save Success Message */}
+            {/* Auto-Save Success Message */}
             {saveSuccess && (
-              <div className="bg-green-50 border-2 border-green-300 text-green-800 px-4 py-3 rounded-lg mt-6 text-center">
-                <p className="font-semibold">✅ Practice session saved successfully!</p>
+              <div className="bg-green-50 border-2 border-green-300 text-green-800 px-4 py-3 rounded-lg mt-6 text-center animate-pulse">
+                <p className="font-semibold">✅ Session saved automatically!</p>
               </div>
             )}
 
-            {/* Save Button */}
-            <div className="mt-6 flex justify-center">
-              <button
-                onClick={handleSaveSession}
-                disabled={isSaving}
-                className="px-8 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl font-semibold hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-              >
-                {isSaving ? "Saving..." : "💾 Save This Session"}
-              </button>
-            </div>
+            {/* Try Again Button - Shows when score < 80 */}
+            {feedback && feedback.score < 80 && (
+              <div className="mt-6 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-300 rounded-xl text-center">
+                <p className="text-blue-900 font-semibold mb-4">
+                  You're very close! Let's fix that one sound. 🎯
+                </p>
+                <button
+                  onClick={() => {
+                    setTranscript("");
+                    setFeedback(null);
+                    setError(null);
+                  }}
+                  disabled={isLoading}
+                  className="px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg font-bold hover:shadow-lg disabled:opacity-50 transition-all inline-block"
+                >
+                  🔁 Try Again
+                </button>
+              </div>
+            )}
           </div>
         )}
 
@@ -225,7 +237,7 @@ export default function PracticePage() {
             disabled={isLoading}
             className="px-6 py-3 bg-indigo-500 text-white rounded-xl font-semibold hover:bg-indigo-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
           >
-            Reset
+            💫 Reset
           </button>
 
           <button
@@ -235,7 +247,7 @@ export default function PracticePage() {
           >
             {currentSentenceIndex === PRACTICE_SENTENCES.length - 1
               ? "Start Over →"
-              : "Next Sentence →"}
+              : "Next →"}
           </button>
         </div>
 
