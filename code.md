@@ -8,7 +8,7 @@ The goal is to help users improve their spoken English, especially difficult sou
 
 TECH STACK:
 
-* Next.js 15 (App Router)
+* Next.js (App Router)
 * TypeScript
 * Prisma ORM
 * PostgreSQL

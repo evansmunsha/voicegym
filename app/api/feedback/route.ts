@@ -1,6 +1,7 @@
 //api/feedback/route.ts
 
 import { NextResponse } from "next/server";
+import { getPronunciationFeedbackAI } from "@/lib/openai";
 
 /**
  * POST /api/feedback
@@ -18,10 +19,15 @@ export async function POST(request: Request) {
       );
     }
 
-    // For now, generate feedback using heuristics
-    const feedback = generateFeedback(expectedSentence, userSpeech);
-
-    return NextResponse.json(feedback);
+    // Use OpenAI for advanced feedback
+    try {
+      const aiResult = await getPronunciationFeedbackAI(expectedSentence, userSpeech);
+      return NextResponse.json(aiResult);
+    } catch (aiError) {
+      // Fallback to heuristic if AI fails
+      const feedback = generateFeedback(expectedSentence, userSpeech);
+      return NextResponse.json({ ...feedback, aiAnalysis: "AI unavailable, using heuristic." });
+    }
   } catch (error) {
     console.error("Feedback API error:", error);
     return NextResponse.json(

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
+import { Confetti } from "@/components/Confetti";
 import { VoiceRecorder } from "@/components/VoiceRecorder";
 import { FeedbackBox } from "@/components/FeedbackBox";
 import { Navbar } from "@/components/Navbar";
@@ -33,6 +34,7 @@ export default function PracticePage() {
   const [error, setError] = useState<string | null>(null);
   const [userId, setUserId] = useState<string>("");
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
 
   const currentSentence = PRACTICE_SENTENCES[currentSentenceIndex];
 
@@ -87,6 +89,10 @@ export default function PracticePage() {
         text
       );
       setFeedback(feedbackData);
+      if (feedbackData.score === 100) {
+        setShowConfetti(true);
+        setTimeout(() => setShowConfetti(false), 2000);
+      }
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "Failed to analyze pronunciation"
@@ -124,9 +130,9 @@ export default function PracticePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-indigo-50">
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-indigo-50 relative">
       <Navbar title="Voice Practice" />
-
+      <Confetti trigger={showConfetti} />
       <main className="max-w-4xl mx-auto px-4 py-8">
         {/* Progress */}
         <div className="bg-white rounded-2xl p-4 mb-8 flex items-center justify-between">

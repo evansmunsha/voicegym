@@ -122,8 +122,65 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
 
 exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
+  username: 'username',
+  email: 'email',
+  avatarUrl: 'avatarUrl',
+  password: 'password',
+  resetToken: 'resetToken',
+  resetTokenExpiry: 'resetTokenExpiry',
+  isPremium: 'isPremium',
+  language: 'language',
+  subscriptionStatus: 'subscriptionStatus',
+  premiumSince: 'premiumSince',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.FriendScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  friendId: 'friendId',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.ChallengeScalarFieldEnum = {
+  id: 'id',
+  fromUserId: 'fromUserId',
+  toUserId: 'toUserId',
+  status: 'status',
+  createdAt: 'createdAt',
+  completedAt: 'completedAt'
+};
+
+exports.Prisma.BadgeScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  icon: 'icon',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.UserBadgeScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  badgeId: 'badgeId',
+  awardedAt: 'awardedAt'
+};
+
+exports.Prisma.NotificationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  message: 'message',
+  read: 'read',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.PracticeHistoryScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  sessionId: 'sessionId',
+  score: 'score',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.PracticeSessionScalarFieldEnum = {
@@ -133,6 +190,9 @@ exports.Prisma.PracticeSessionScalarFieldEnum = {
   userText: 'userText',
   feedback: 'feedback',
   score: 'score',
+  phonemeErrors: 'phonemeErrors',
+  aiSuggestions: 'aiSuggestions',
+  aiAnalysis: 'aiAnalysis',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -152,6 +212,11 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
+};
+
 exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
@@ -162,9 +227,21 @@ exports.Prisma.NullsOrder = {
   last: 'last'
 };
 
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
+};
+
 
 exports.Prisma.ModelName = {
   User: 'User',
+  Friend: 'Friend',
+  Challenge: 'Challenge',
+  Badge: 'Badge',
+  UserBadge: 'UserBadge',
+  Notification: 'Notification',
+  PracticeHistory: 'PracticeHistory',
   PracticeSession: 'PracticeSession',
   Progress: 'Progress'
 };

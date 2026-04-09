@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
+import WaveSurfer from "wavesurfer.js";
 import { SpeechRecognizer, speakText, stopSpeaking } from "@/lib/speech";
 
 interface VoiceRecorderProps {
@@ -22,6 +23,8 @@ export function VoiceRecorder({
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [recordedAudioUrl, setRecordedAudioUrl] = useState<string | null>(null);
   const [isPlayingBack, setIsPlayingBack] = useState(false);
+  const waveformRef = useRef<HTMLDivElement | null>(null);
+  const wavesurferRef = useRef<WaveSurfer | null>(null);
   const recognizerRef = useRef<SpeechRecognizer | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
@@ -119,25 +122,36 @@ export function VoiceRecorder({
   // Playback user's recorded voice
   const handlePlaybackUserVoice = useCallback(() => {
     if (!recordedAudioUrl) return;
-    
-    try {
-      setIsPlayingBack(true);
-      const audio = new Audio(recordedAudioUrl);
-      
-      audio.onended = () => {
-        setIsPlayingBack(false);
-      };
-      
-      audio.onerror = () => {
-        setError("Failed to play recording");
-        setIsPlayingBack(false);
-      };
-      
-      audio.play();
-    } catch (err) {
-      setError("Failed to play your voice");
-      setIsPlayingBack(false);
+    setIsPlayingBack(true);
+    if (wavesurferRef.current) {
+      wavesurferRef.current.play();
     }
+  }, [recordedAudioUrl]);
+
+  // Initialize waveform when audio is recorded
+  useEffect(() => {
+    if (recordedAudioUrl && waveformRef.current) {
+      if (wavesurferRef.current) {
+        wavesurferRef.current.destroy();
+      }
+      wavesurferRef.current = WaveSurfer.create({
+        container: waveformRef.current,
+        waveColor: '#a5b4fc',
+        progressColor: '#6366f1',
+        height: 32,
+        responsive: true,
+        barWidth: 2,
+      });
+      wavesurferRef.current.load(recordedAudioUrl);
+      wavesurferRef.current.on('finish', () => setIsPlayingBack(false));
+      wavesurferRef.current.on('error', () => setIsPlayingBack(false));
+    }
+    return () => {
+      if (wavesurferRef.current) {
+        wavesurferRef.current.destroy();
+        wavesurferRef.current = null;
+      }
+    };
   }, [recordedAudioUrl]);
 
   // Handle stop speaking
@@ -172,15 +186,21 @@ export function VoiceRecorder({
           <p className="text-xl text-gray-900">{transcript}</p>
           
           {/* Playback User Voice */}
-          {recordedAudioUrl && (
-            <button
-              onClick={handlePlaybackUserVoice}
-              disabled={isPlayingBack}
-              className="mt-3 px-4 py-2 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 disabled:opacity-50 transition"
-            >
-              {isPlayingBack ? "🔊 Playing..." : "🔊 Hear Your Voice"}
-            </button>
-          )}
+            {recordedAudioUrl && (
+              <>
+                <button
+                  onClick={handlePlaybackUserVoice}
+                  disabled={isPlayingBack}
+                  className="mt-3 px-4 py-2 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 disabled:opacity-50 transition"
+                >
+                  {isPlayingBack ? "Playing..." : "🔊 Play Your Recording"}
+                </button>
+                {/* Optional: Visual waveform placeholder */}
+                <div className="mt-2">
+                  <div ref={waveformRef} className="w-full h-12 bg-gray-100 rounded"></div>
+                </div>
+              </>
+            )}
         </div>
       )}
 

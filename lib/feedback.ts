@@ -11,6 +11,10 @@ export interface FeedbackResponse {
   explanation: string;
   score: number; // 0-100
   suggestions: string[];
+  phonemeErrors?: any[]; // AI: Detected phoneme-level errors
+  aiSuggestions?: any[]; // AI: Suggestions for improvement
+  aiAnalysis?: string;   // AI: Full analysis text
+  feedback?: string;     // AI: Short summary
 }
 
 /**

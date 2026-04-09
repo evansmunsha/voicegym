@@ -11,6 +11,10 @@ export interface FeedbackBoxProps {
   suggestions: string[];
   userSpeech: string;
   expectedSentence: string;
+  phonemeErrors?: any[];
+  aiSuggestions?: any[];
+  aiAnalysis?: string;
+  feedback?: string;
 }
 
 export function FeedbackBox({
@@ -21,6 +25,10 @@ export function FeedbackBox({
   suggestions,
   userSpeech,
   expectedSentence,
+  phonemeErrors = [],
+  aiSuggestions = [],
+  aiAnalysis = "",
+  feedback = "",
 }: FeedbackBoxProps) {
   const [expandedSection, setExpandedSection] = useState<string | null>(
     "overview"
@@ -54,6 +62,13 @@ export function FeedbackBox({
 
   return (
     <div className="w-full max-w-2xl mx-auto space-y-4">
+      {/* AI Feedback Summary */}
+      {feedback && (
+        <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-2xl p-4 border border-green-200">
+          <p className="text-lg font-semibold text-green-900 mb-1">AI Feedback</p>
+          <p className="text-gray-800">{feedback}</p>
+        </div>
+      )}
       {/* Score Card */}
       <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-6 border-2 border-purple-200">
         <div className="flex items-center justify-between">
@@ -92,7 +107,80 @@ export function FeedbackBox({
         </div>
       </div>
 
-      {/* Collapsible Sections */}
+      {/* AI Phoneme Errors Section */}
+      {phonemeErrors.length > 0 && (
+        <div className="border border-gray-200 rounded-xl overflow-hidden">
+          <button
+            onClick={() => toggleSection("phonemeErrors")}
+            className="w-full px-4 py-3 bg-orange-50 hover:bg-orange-100 flex items-center justify-between transition-colors"
+          >
+            <span className="font-semibold text-orange-900 flex items-center gap-2">
+              <span className="text-lg">🔊</span>
+              Pronunciation Issues ({phonemeErrors.length})
+            </span>
+            <span className="text-orange-900">
+              {expandedSection === "phonemeErrors" ? "▼" : "▶"}
+            </span>
+          </button>
+          {expandedSection === "phonemeErrors" && (
+            <div className="p-4 space-y-2">
+              {phonemeErrors.map((err, idx) => (
+                <div key={idx} className="text-gray-700 pb-2 border-b border-orange-100 last:border-b-0">
+                  <p className="font-medium text-orange-900">• {typeof err === "string" ? err : JSON.stringify(err)}</p>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* AI Suggestions Section */}
+      {aiSuggestions.length > 0 && (
+        <div className="border border-gray-200 rounded-xl overflow-hidden">
+          <button
+            onClick={() => toggleSection("aiSuggestions")}
+            className="w-full px-4 py-3 bg-cyan-50 hover:bg-cyan-100 flex items-center justify-between transition-colors"
+          >
+            <span className="font-semibold text-cyan-900 flex items-center gap-2">
+              <span className="text-lg">🧑‍🏫</span>
+              AI Suggestions ({aiSuggestions.length})
+            </span>
+            <span className="text-cyan-900">
+              {expandedSection === "aiSuggestions" ? "▼" : "▶"}
+            </span>
+          </button>
+          {expandedSection === "aiSuggestions" && (
+            <div className="p-4 space-y-2">
+              {aiSuggestions.map((sugg, idx) => (
+                <div key={idx} className="text-gray-700 pb-2 border-b border-cyan-100 last:border-b-0">
+                  <p className="font-medium text-cyan-900">💡 {typeof sugg === "string" ? sugg : JSON.stringify(sugg)}</p>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* AI Analysis Section */}
+      {aiAnalysis && (
+        <div className="border border-gray-200 rounded-xl overflow-hidden">
+          <button
+            onClick={() => toggleSection("aiAnalysis")}
+            className="w-full px-4 py-3 bg-indigo-50 hover:bg-indigo-100 flex items-center justify-between transition-colors"
+          >
+            <span className="font-semibold text-indigo-900 flex items-center gap-2">
+              <span className="text-lg">📝</span>
+              AI Full Analysis
+            </span>
+            <span className="text-indigo-900">
+              {expandedSection === "aiAnalysis" ? "▼" : "▶"}
+            </span>
+          </button>
+          {expandedSection === "aiAnalysis" && (
+            <div className="p-4 text-gray-700 whitespace-pre-line">{aiAnalysis}</div>
+          )}
+        </div>
+      )}
       {/* Mistakes Section */}
       {mistakes.length > 0 && (
         <div className="border border-gray-200 rounded-xl overflow-hidden">
