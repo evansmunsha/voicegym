@@ -297,7 +297,7 @@ export default async function Home() {
               {/* Mini sparkline */}
               {recentScores.length > 1 && (
                 <div className="flex items-end gap-1" style={{ height: 40 }}>
-                  {recentScores.slice(-8).map((s, i) => (
+                  {recentScores.slice(-8).map((s: number, i: number) => (
                     <div key={i} style={{
                       width: 8, borderRadius: "3px 3px 0 0",
                       height: `${Math.round((s / maxScore) * 38)}px`,
