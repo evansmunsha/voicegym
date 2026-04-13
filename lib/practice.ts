@@ -12,6 +12,8 @@ export interface SavePracticeRequest {
   userText: string;
   feedback?: string;
   score?: number;
+  audioUrl?: string;
+  hints?: any[];
 }
 
 export interface SavePracticeResponse {

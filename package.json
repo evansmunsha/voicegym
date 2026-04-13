@@ -17,17 +17,25 @@
   "dependencies": {
     "@prisma/adapter-pg": "^7.6.0",
     "@prisma/client": "^7.6.0",
+    "@supabase/supabase-js": "^2.35.0",
     "@types/bcryptjs": "^2.4.6",
     "bcryptjs": "^3.0.3",
     "dotenv": "^17.3.1",
     "next": "16.2.1",
     "next-pwa": "^5.6.0",
     "openai": "^6.34.0",
+    "pathe": "^2.0.3",
     "prisma": "^7.6.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "resend": "^6.10.0",
+    "retry": "^0.12.0",
     "wavesurfer.js": "^7.12.5"
+  },
+  "dependenciesMeta": {
+    "@supabase/supabase-js": {
+      "optional": false
+    }
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

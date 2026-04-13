@@ -116,7 +116,9 @@ model PracticeSession {
   score          Float?    // Score (0-100)
   phonemeErrors  Json?     // AI: Detected phoneme-level errors
   aiSuggestions  Json?     // AI: Suggestions for improvement
+  hints          Json?     // Structured live hints emitted during analysis
   aiAnalysis     String?   // AI: Full analysis text
+  audioUrl       String?   // Optional link to uploaded audio
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 

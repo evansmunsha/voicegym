@@ -7,7 +7,7 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    const { userId, sentence, userText, feedback, score } = body;
+    const { userId, sentence, userText, feedback, score, hints } = body;
 
     // Validate required fields
     if (!userId || !sentence || !userText) {
@@ -19,15 +19,16 @@ export async function POST(req: Request) {
 
     // Save practice session to database
     const prisma = getPrismaClient();
-    const session = await prisma.practiceSession.create({
-      data: {
-        userId,
-        sentence,
-        userText,
-        feedback: feedback || "",
-        score: score || 0,
-      },
-    });
+    const createData: any = {
+      userId,
+      sentence,
+      userText,
+      feedback: feedback || "",
+      score: score || 0,
+    };
+    if (hints) createData.hints = hints;
+
+    const session = await prisma.practiceSession.create({ data: createData });
 
     // Update user progress
     const existingProgress = await prisma.progress.findUnique({

@@ -1,0 +1,61 @@
+﻿node.exe : npm error code EUSAGE
+At line:1 char:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Users\Evans Munsha\AppData\R ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (npm error code EUSAGE:String) [], 
+    RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+npm error
+npm error `npm ci` can only install packages when your package.json and 
+package-lock.json or npm-shrinkwrap.json are in sync. Please update your lock 
+file with `npm install` before continuing.
+npm error
+npm error Missing: @supabase/supabase-js@2.103.0 from lock file
+npm error Missing: @supabase/auth-js@2.103.0 from lock file
+npm error Missing: @supabase/functions-js@2.103.0 from lock file
+npm error Missing: @supabase/postgrest-js@2.103.0 from lock file
+npm error Missing: @supabase/realtime-js@2.103.0 from lock file
+npm error Missing: @supabase/storage-js@2.103.0 from lock file
+npm error Missing: @supabase/phoenix@0.4.0 from lock file
+npm error Missing: @types/ws@8.18.1 from lock file
+npm error Missing: ws@8.20.0 from lock file
+npm error Missing: iceberg-js@0.8.1 from lock file
+npm error
+npm error Clean install a project
+npm error
+npm error Usage:
+npm error npm ci
+npm error
+npm error Options:
+npm error [--install-strategy <hoisted|nested|shallow|linked>] 
+[--legacy-bundling]
+npm error [--global-style] [--omit <dev|optional|peer> [--omit 
+<dev|optional|peer> ...]]
+npm error [--include <prod|dev|optional|peer> [--include 
+<prod|dev|optional|peer> ...]]
+npm error [--strict-peer-deps] [--foreground-scripts] [--ignore-scripts] 
+[--no-audit]
+npm error [--no-bin-links] [--no-fund] [--dry-run]
+npm error [-w|--workspace <workspace-name> [-w|--workspace <workspace-name> 
+...]]
+npm error [--workspaces] [--include-workspace-root] [--install-links]
+npm error
+npm error aliases: clean-install, ic, install-clean, isntall-clean
+npm error
+npm error Run "npm help ci" for more info
+npm error A complete log of this run can be found in: C:\Users\Evans 
+Munsha\AppData\Local\npm-cache\_logs\2026-04-12T22_43_01_658Z-debug-0.log
+
+> voicegym@0.1.0 build
+> next build
+
+node.exe : 'next' is not recognized as an internal or external command,
+At line:1 char:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Users\Evans Munsha\AppData\R ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ('next' is not r...ternal command, 
+   :String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+operable program or batch file.

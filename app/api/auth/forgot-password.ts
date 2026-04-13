@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import getPrismaClient from '../../../lib/prisma';
-import { randomBytes } from 'crypto';
+import { randomBytes, createHash } from 'crypto';
 import { sendPasswordResetEmail } from '../../../lib/email';
 
 export async function POST(req: NextRequest) {
@@ -10,14 +10,15 @@ export async function POST(req: NextRequest) {
   }
   const prisma = getPrismaClient();
   const user = await prisma.user.findUnique({ where: { email } });
-  if (!user) {
-    return NextResponse.json({ error: 'User not found' }, { status: 404 });
-  }
+  // Always respond with success to avoid user enumeration
   const token = randomBytes(32).toString('hex');
-  await prisma.user.update({
-    where: { email },
-    data: { resetToken: token, resetTokenExpiry: new Date(Date.now() + 1000 * 60 * 60) },
-  });
-  await sendPasswordResetEmail(email, token);
-  return NextResponse.json({ message: 'Password reset email sent' });
+  const hashedToken = createHash('sha256').update(token).digest('hex');
+  if (user) {
+    await prisma.user.update({
+      where: { email },
+      data: { resetToken: hashedToken, resetTokenExpiry: new Date(Date.now() + 1000 * 60 * 60) },
+    });
+    await sendPasswordResetEmail(email, token);
+  }
+  return NextResponse.json({ message: 'If an account with that email exists, a reset link has been sent.' });
 }

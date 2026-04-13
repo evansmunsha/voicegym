@@ -42,6 +42,7 @@ export type PracticeSessionMinAggregateOutputType = {
   feedback: string | null
   score: number | null
   aiAnalysis: string | null
+  audioUrl: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -54,6 +55,7 @@ export type PracticeSessionMaxAggregateOutputType = {
   feedback: string | null
   score: number | null
   aiAnalysis: string | null
+  audioUrl: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -67,7 +69,9 @@ export type PracticeSessionCountAggregateOutputType = {
   score: number
   phonemeErrors: number
   aiSuggestions: number
+  hints: number
   aiAnalysis: number
+  audioUrl: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -90,6 +94,7 @@ export type PracticeSessionMinAggregateInputType = {
   feedback?: true
   score?: true
   aiAnalysis?: true
+  audioUrl?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -102,6 +107,7 @@ export type PracticeSessionMaxAggregateInputType = {
   feedback?: true
   score?: true
   aiAnalysis?: true
+  audioUrl?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -115,7 +121,9 @@ export type PracticeSessionCountAggregateInputType = {
   score?: true
   phonemeErrors?: true
   aiSuggestions?: true
+  hints?: true
   aiAnalysis?: true
+  audioUrl?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -216,7 +224,9 @@ export type PracticeSessionGroupByOutputType = {
   score: number | null
   phonemeErrors: runtime.JsonValue | null
   aiSuggestions: runtime.JsonValue | null
+  hints: runtime.JsonValue | null
   aiAnalysis: string | null
+  audioUrl: string | null
   createdAt: Date
   updatedAt: Date
   _count: PracticeSessionCountAggregateOutputType | null
@@ -253,7 +263,9 @@ export type PracticeSessionWhereInput = {
   score?: Prisma.FloatNullableFilter<"PracticeSession"> | number | null
   phonemeErrors?: Prisma.JsonNullableFilter<"PracticeSession">
   aiSuggestions?: Prisma.JsonNullableFilter<"PracticeSession">
+  hints?: Prisma.JsonNullableFilter<"PracticeSession">
   aiAnalysis?: Prisma.StringNullableFilter<"PracticeSession"> | string | null
+  audioUrl?: Prisma.StringNullableFilter<"PracticeSession"> | string | null
   createdAt?: Prisma.DateTimeFilter<"PracticeSession"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"PracticeSession"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -269,7 +281,9 @@ export type PracticeSessionOrderByWithRelationInput = {
   score?: Prisma.SortOrderInput | Prisma.SortOrder
   phonemeErrors?: Prisma.SortOrderInput | Prisma.SortOrder
   aiSuggestions?: Prisma.SortOrderInput | Prisma.SortOrder
+  hints?: Prisma.SortOrderInput | Prisma.SortOrder
   aiAnalysis?: Prisma.SortOrderInput | Prisma.SortOrder
+  audioUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
@@ -288,7 +302,9 @@ export type PracticeSessionWhereUniqueInput = Prisma.AtLeast<{
   score?: Prisma.FloatNullableFilter<"PracticeSession"> | number | null
   phonemeErrors?: Prisma.JsonNullableFilter<"PracticeSession">
   aiSuggestions?: Prisma.JsonNullableFilter<"PracticeSession">
+  hints?: Prisma.JsonNullableFilter<"PracticeSession">
   aiAnalysis?: Prisma.StringNullableFilter<"PracticeSession"> | string | null
+  audioUrl?: Prisma.StringNullableFilter<"PracticeSession"> | string | null
   createdAt?: Prisma.DateTimeFilter<"PracticeSession"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"PracticeSession"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -304,7 +320,9 @@ export type PracticeSessionOrderByWithAggregationInput = {
   score?: Prisma.SortOrderInput | Prisma.SortOrder
   phonemeErrors?: Prisma.SortOrderInput | Prisma.SortOrder
   aiSuggestions?: Prisma.SortOrderInput | Prisma.SortOrder
+  hints?: Prisma.SortOrderInput | Prisma.SortOrder
   aiAnalysis?: Prisma.SortOrderInput | Prisma.SortOrder
+  audioUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.PracticeSessionCountOrderByAggregateInput
@@ -326,7 +344,9 @@ export type PracticeSessionScalarWhereWithAggregatesInput = {
   score?: Prisma.FloatNullableWithAggregatesFilter<"PracticeSession"> | number | null
   phonemeErrors?: Prisma.JsonNullableWithAggregatesFilter<"PracticeSession">
   aiSuggestions?: Prisma.JsonNullableWithAggregatesFilter<"PracticeSession">
+  hints?: Prisma.JsonNullableWithAggregatesFilter<"PracticeSession">
   aiAnalysis?: Prisma.StringNullableWithAggregatesFilter<"PracticeSession"> | string | null
+  audioUrl?: Prisma.StringNullableWithAggregatesFilter<"PracticeSession"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"PracticeSession"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"PracticeSession"> | Date | string
 }
@@ -339,7 +359,9 @@ export type PracticeSessionCreateInput = {
   score?: number | null
   phonemeErrors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   aiSuggestions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  hints?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   aiAnalysis?: string | null
+  audioUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutSessionsInput
@@ -355,7 +377,9 @@ export type PracticeSessionUncheckedCreateInput = {
   score?: number | null
   phonemeErrors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   aiSuggestions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  hints?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   aiAnalysis?: string | null
+  audioUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   practiceHistory?: Prisma.PracticeHistoryUncheckedCreateNestedManyWithoutSessionInput
@@ -369,7 +393,9 @@ export type PracticeSessionUpdateInput = {
   score?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   phonemeErrors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   aiSuggestions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  hints?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   aiAnalysis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  audioUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutSessionsNestedInput
@@ -385,7 +411,9 @@ export type PracticeSessionUncheckedUpdateInput = {
   score?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   phonemeErrors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   aiSuggestions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  hints?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   aiAnalysis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  audioUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   practiceHistory?: Prisma.PracticeHistoryUncheckedUpdateManyWithoutSessionNestedInput
@@ -400,7 +428,9 @@ export type PracticeSessionCreateManyInput = {
   score?: number | null
   phonemeErrors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   aiSuggestions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  hints?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   aiAnalysis?: string | null
+  audioUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -413,7 +443,9 @@ export type PracticeSessionUpdateManyMutationInput = {
   score?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   phonemeErrors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   aiSuggestions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  hints?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   aiAnalysis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  audioUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -427,7 +459,9 @@ export type PracticeSessionUncheckedUpdateManyInput = {
   score?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   phonemeErrors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   aiSuggestions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  hints?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   aiAnalysis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  audioUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -456,7 +490,9 @@ export type PracticeSessionCountOrderByAggregateInput = {
   score?: Prisma.SortOrder
   phonemeErrors?: Prisma.SortOrder
   aiSuggestions?: Prisma.SortOrder
+  hints?: Prisma.SortOrder
   aiAnalysis?: Prisma.SortOrder
+  audioUrl?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -473,6 +509,7 @@ export type PracticeSessionMaxOrderByAggregateInput = {
   feedback?: Prisma.SortOrder
   score?: Prisma.SortOrder
   aiAnalysis?: Prisma.SortOrder
+  audioUrl?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -485,6 +522,7 @@ export type PracticeSessionMinOrderByAggregateInput = {
   feedback?: Prisma.SortOrder
   score?: Prisma.SortOrder
   aiAnalysis?: Prisma.SortOrder
+  audioUrl?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -565,7 +603,9 @@ export type PracticeSessionCreateWithoutUserInput = {
   score?: number | null
   phonemeErrors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   aiSuggestions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  hints?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   aiAnalysis?: string | null
+  audioUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   practiceHistory?: Prisma.PracticeHistoryCreateNestedManyWithoutSessionInput
@@ -579,7 +619,9 @@ export type PracticeSessionUncheckedCreateWithoutUserInput = {
   score?: number | null
   phonemeErrors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   aiSuggestions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  hints?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   aiAnalysis?: string | null
+  audioUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   practiceHistory?: Prisma.PracticeHistoryUncheckedCreateNestedManyWithoutSessionInput
@@ -623,7 +665,9 @@ export type PracticeSessionScalarWhereInput = {
   score?: Prisma.FloatNullableFilter<"PracticeSession"> | number | null
   phonemeErrors?: Prisma.JsonNullableFilter<"PracticeSession">
   aiSuggestions?: Prisma.JsonNullableFilter<"PracticeSession">
+  hints?: Prisma.JsonNullableFilter<"PracticeSession">
   aiAnalysis?: Prisma.StringNullableFilter<"PracticeSession"> | string | null
+  audioUrl?: Prisma.StringNullableFilter<"PracticeSession"> | string | null
   createdAt?: Prisma.DateTimeFilter<"PracticeSession"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"PracticeSession"> | Date | string
 }
@@ -636,7 +680,9 @@ export type PracticeSessionCreateWithoutPracticeHistoryInput = {
   score?: number | null
   phonemeErrors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   aiSuggestions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  hints?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   aiAnalysis?: string | null
+  audioUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutSessionsInput
@@ -651,7 +697,9 @@ export type PracticeSessionUncheckedCreateWithoutPracticeHistoryInput = {
   score?: number | null
   phonemeErrors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   aiSuggestions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  hints?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   aiAnalysis?: string | null
+  audioUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -680,7 +728,9 @@ export type PracticeSessionUpdateWithoutPracticeHistoryInput = {
   score?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   phonemeErrors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   aiSuggestions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  hints?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   aiAnalysis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  audioUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutSessionsNestedInput
@@ -695,7 +745,9 @@ export type PracticeSessionUncheckedUpdateWithoutPracticeHistoryInput = {
   score?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   phonemeErrors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   aiSuggestions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  hints?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   aiAnalysis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  audioUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -708,7 +760,9 @@ export type PracticeSessionCreateManyUserInput = {
   score?: number | null
   phonemeErrors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   aiSuggestions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  hints?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   aiAnalysis?: string | null
+  audioUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -721,7 +775,9 @@ export type PracticeSessionUpdateWithoutUserInput = {
   score?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   phonemeErrors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   aiSuggestions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  hints?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   aiAnalysis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  audioUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   practiceHistory?: Prisma.PracticeHistoryUpdateManyWithoutSessionNestedInput
@@ -735,7 +791,9 @@ export type PracticeSessionUncheckedUpdateWithoutUserInput = {
   score?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   phonemeErrors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   aiSuggestions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  hints?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   aiAnalysis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  audioUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   practiceHistory?: Prisma.PracticeHistoryUncheckedUpdateManyWithoutSessionNestedInput
@@ -749,7 +807,9 @@ export type PracticeSessionUncheckedUpdateManyWithoutUserInput = {
   score?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   phonemeErrors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   aiSuggestions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  hints?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   aiAnalysis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  audioUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -794,7 +854,9 @@ export type PracticeSessionSelect<ExtArgs extends runtime.Types.Extensions.Inter
   score?: boolean
   phonemeErrors?: boolean
   aiSuggestions?: boolean
+  hints?: boolean
   aiAnalysis?: boolean
+  audioUrl?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -811,7 +873,9 @@ export type PracticeSessionSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   score?: boolean
   phonemeErrors?: boolean
   aiSuggestions?: boolean
+  hints?: boolean
   aiAnalysis?: boolean
+  audioUrl?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -826,7 +890,9 @@ export type PracticeSessionSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   score?: boolean
   phonemeErrors?: boolean
   aiSuggestions?: boolean
+  hints?: boolean
   aiAnalysis?: boolean
+  audioUrl?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -841,12 +907,14 @@ export type PracticeSessionSelectScalar = {
   score?: boolean
   phonemeErrors?: boolean
   aiSuggestions?: boolean
+  hints?: boolean
   aiAnalysis?: boolean
+  audioUrl?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type PracticeSessionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "sentence" | "userText" | "feedback" | "score" | "phonemeErrors" | "aiSuggestions" | "aiAnalysis" | "createdAt" | "updatedAt", ExtArgs["result"]["practiceSession"]>
+export type PracticeSessionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "sentence" | "userText" | "feedback" | "score" | "phonemeErrors" | "aiSuggestions" | "hints" | "aiAnalysis" | "audioUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["practiceSession"]>
 export type PracticeSessionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   practiceHistory?: boolean | Prisma.PracticeSession$practiceHistoryArgs<ExtArgs>
@@ -874,7 +942,9 @@ export type $PracticeSessionPayload<ExtArgs extends runtime.Types.Extensions.Int
     score: number | null
     phonemeErrors: runtime.JsonValue | null
     aiSuggestions: runtime.JsonValue | null
+    hints: runtime.JsonValue | null
     aiAnalysis: string | null
+    audioUrl: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["practiceSession"]>
@@ -1310,7 +1380,9 @@ export interface PracticeSessionFieldRefs {
   readonly score: Prisma.FieldRef<"PracticeSession", 'Float'>
   readonly phonemeErrors: Prisma.FieldRef<"PracticeSession", 'Json'>
   readonly aiSuggestions: Prisma.FieldRef<"PracticeSession", 'Json'>
+  readonly hints: Prisma.FieldRef<"PracticeSession", 'Json'>
   readonly aiAnalysis: Prisma.FieldRef<"PracticeSession", 'String'>
+  readonly audioUrl: Prisma.FieldRef<"PracticeSession", 'String'>
   readonly createdAt: Prisma.FieldRef<"PracticeSession", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"PracticeSession", 'DateTime'>
 }

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { hash } from 'bcryptjs';
 import getPrismaClient from '../../../lib/prisma';
+import { createHash } from 'crypto';
 
 export async function POST(req: NextRequest) {
   const { token, password } = await req.json();
@@ -8,9 +9,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Missing fields' }, { status: 400 });
   }
   const prisma = getPrismaClient();
+  const hashedToken = createHash('sha256').update(token).digest('hex');
   const user = await prisma.user.findFirst({
     where: {
-      resetToken: token,
+      resetToken: hashedToken,
       resetTokenExpiry: { gt: new Date() },
     },
   });

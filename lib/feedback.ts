@@ -48,6 +48,73 @@ export async function getPronunciationFeedback(
 }
 
 /**
+ * Stream pronunciation feedback from the server.
+ * Calls POST /api/feedback/stream and parses newline-delimited JSON messages.
+ */
+export async function streamPronunciationFeedback(
+  expectedSentence: string,
+  userSpeech: string,
+  onMessage?: (msg: any) => void
+): Promise<FeedbackResponse> {
+  try {
+    const res = await fetch("/api/feedback/stream", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ expectedSentence, userSpeech }),
+    });
+
+    if (!res.ok) {
+      throw new Error(`Stream API error: ${res.status}`);
+    }
+
+    if (!res.body) {
+      throw new Error("Empty response body from stream");
+    }
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = "";
+    let final: any = null;
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split("\n");
+      buffer = lines.pop() || "";
+      for (const line of lines) {
+        if (!line.trim()) continue;
+        try {
+          const obj = JSON.parse(line);
+          onMessage?.(obj);
+          if (obj.type === "result") {
+            final = obj.data;
+          }
+        } catch (e) {
+          // ignore parse errors for partial chunks
+        }
+      }
+    }
+
+    if (buffer.trim()) {
+      try {
+        const obj = JSON.parse(buffer);
+        onMessage?.(obj);
+        if (obj.type === "result") final = obj.data;
+      } catch (e) {
+        // ignore
+      }
+    }
+
+    if (!final) throw new Error("No result from feedback stream");
+    return final as FeedbackResponse;
+  } catch (error) {
+    console.error("streamPronunciationFeedback failed:", error);
+    throw error;
+  }
+}
+
+/**
  * Generate score based on text similarity
  * Simple heuristic: count matching words
  */

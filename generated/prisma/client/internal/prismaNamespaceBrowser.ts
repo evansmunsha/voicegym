@@ -171,7 +171,9 @@ export const PracticeSessionScalarFieldEnum = {
   score: 'score',
   phonemeErrors: 'phonemeErrors',
   aiSuggestions: 'aiSuggestions',
+  hints: 'hints',
   aiAnalysis: 'aiAnalysis',
+  audioUrl: 'audioUrl',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
